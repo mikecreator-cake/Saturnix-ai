@@ -19,24 +19,23 @@
             height: 100vh;
             height: -webkit-fill-available;
             overflow: hidden;
+            flex-direction: column;
         }
 
-        /* Menu Lateral */
-        .sidebar {
-            width: 260px;
+        /* Topo de Configuração no Celular */
+        .top-bar {
             background-color: #121217;
-            padding: 20px;
+            padding: 15px;
+            border-bottom: 1px solid #1f1f29;
             display: flex;
             flex-direction: column;
-            border-right: 1px solid #1f1f29;
-            z-index: 10;
+            gap: 10px;
         }
 
         .logo-container {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 30px;
         }
 
         .logo-icon {
@@ -60,47 +59,37 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .section-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #6b7280;
-            margin-bottom: 10px;
-            font-weight: 600;
+        .api-box {
+            display: flex;
+            gap: 8px;
+            width: 100%;
         }
 
-        select {
-            width: 100%;
-            padding: 10px;
+        .api-input {
+            flex: 1;
+            padding: 10px 15px;
             background-color: #1c1c24;
             border: 1px solid #2d2d3d;
             border-radius: 8px;
             color: #e2e2e6;
             outline: none;
-            cursor: pointer;
-            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+        
+        .api-input:focus {
+            border-color: #00ffcc;
         }
 
-        .history-container {
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .history-item {
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 8px;
+        .btn-salvar-token {
+            padding: 10px 15px;
+            background: #2563eb;
+            border: none;
+            color: white;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 0.9rem;
+            font-weight: 600;
             white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            background-color: transparent;
-            transition: background 0.2s;
-        }
-
-        .history-item:hover {
-            background-color: #1c1c24;
         }
 
         /* Área do Chat Principal */
@@ -108,9 +97,9 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            height: 100%;
             position: relative;
             background-color: #0b0b0e;
+            overflow: hidden;
         }
 
         .chat-messages {
@@ -162,7 +151,7 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            padding: 20px;
+            padding: 15px;
             background: linear-gradient(to top, #0b0b0e 70%, transparent);
             display: flex;
             gap: 10px;
@@ -176,7 +165,7 @@
             align-items: center;
         }
 
-        input {
+        input.chat-input {
             width: 100%;
             padding: 14px 20px;
             background-color: #121217;
@@ -185,14 +174,13 @@
             color: #e2e2e6;
             font-size: 0.95rem;
             outline: none;
-            transition: border-color 0.2s;
         }
 
-        input:focus {
+        input.chat-input:focus {
             border-color: #00ffcc;
         }
 
-        button {
+        .btn-enviar {
             background: linear-gradient(135deg, #00ffcc, #2563eb);
             border: none;
             color: white;
@@ -203,42 +191,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.2s;
             flex-shrink: 0;
-        }
-
-        button:active {
-            transform: scale(0.95);
-        }
-
-        /* Responsividade para Telemóveis */
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-                height: auto;
-                padding: 12px 15px;
-                border-right: none;
-                border-bottom: 1px solid #1f1f29;
-            }
-            .logo-container {
-                margin-bottom: 10px;
-            }
-            .section-title, .history-container {
-                display: none;
-            }
-            select {
-                margin-bottom: 0;
-            }
-            .chat-messages {
-                padding: 15px;
-                padding-bottom: 90px;
-            }
-            .input-container {
-                padding: 10px;
-            }
         }
 
         @keyframes fadeIn {
@@ -249,83 +202,77 @@
 </head>
 <body>
 
-    <div class="sidebar">
+    <div class="top-bar">
         <div class="logo-container">
             <div class="logo-icon">S</div>
-            <div class="brand-name">SATURNIX</div>
+            <div class="brand-name">SATURNIX AI</div>
         </div>
-        
-        <div class="section-title">Personalidade da IA</div>
-        <select id="selectPersonalidade">
-            <option value="padrao">Padrão (Equilibrado)</option>
-            <option value="tech">Especialista Tech</option>
-            <option value="dev">Modo Programador</option>
-        </select>
-
-        <div class="section-title">Histórico Local</div>
-        <div class="history-container" id="historicoVisual"></div>
+        <div class="api-box">
+            <input type="password" id="tokenInput" class="api-input" placeholder="Cole sua chave ativa hf_..." autocomplete="off">
+            <button id="btnSalvarToken" class="btn-salvar-token">Salvar</button>
+        </div>
     </div>
 
     <div class="chat-area">
         <div class="chat-messages" id="chatMessages">
-            <div class="message system-message">
-                Olá! Eu sou o Saturnix. Conexão restabelecida com sucesso. Como posso ajudar você hoje?
+            <div class="message system-message" id="boasVindasMsg">
+                Olá! Para ativar o Saturnix, cole um Token ativo do Hugging Face no campo acima e clique em "Salvar".
             </div>
         </div>
 
         <div class="input-container">
             <div class="input-wrapper">
-                <input type="text" id="userInput" placeholder="Envie uma mensagem para o Saturnix..." autocomplete="off">
+                <input type="text" id="userInput" class="chat-input" placeholder="Envie uma mensagem..." autocomplete="off">
             </div>
-            <button id="btnEnviar">
+            <button id="btnEnviar" class="btn-enviar">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
         </div>
     </div>
 
     <script>
-        // Usei uma codificação simples para o robô do GitHub não ler a palavra hf_ diretamente ao salvar
-        const _0x1 = "hf_";
-        const _0x2 = "pZEwGIdAnYvHthlM";
-        const _0x3 = "pYvCOmJZKloRJXbN"; 
-        const HUGGING_FACE_API_KEY = _0x1 + "uM" + _0x2 + "vU" + _0x3;
-        
         const MODEL_URL = "https://api-inference.huggingface.co/models/Core42/jais-13b-chat";
 
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
         const btnEnviar = document.getElementById('btnEnviar');
-        const historicoVisual = document.getElementById('historicoVisual');
+        const tokenInput = document.getElementById('tokenInput');
+        const btnSalvarToken = document.getElementById('btnSalvarToken');
+        const boasVindasMsg = document.getElementById('boasVindasMsg');
 
-        let historicoChat = JSON.parse(localStorage.getItem('saturnix_history')) || [];
+        let tokenSalvo = localStorage.getItem('saturnix_api_key') || "";
 
-        function salvarHistorico() {
-            localStorage.setItem('saturnix_history', JSON.stringify(historicoChat));
-            atualizarHistoricoVisual();
+        if (tokenSalvo) {
+            tokenInput.value = tokenSalvo;
+            boasVindasMsg.innerText = "Saturnix pronto e conectado com sua chave local! Como posso ajudar você?";
         }
 
-        function atualizarHistoricoVisual() {
-            historicoVisual.innerHTML = '';
-            historicoChat.slice().reverse().forEach((msg) => {
-                if(msg.role === 'user') {
-                    const item = document.createElement('div');
-                    item.className = 'history-item';
-                    item.innerText = msg.content;
-                    historicoVisual.appendChild(item);
-                }
-            });
-        }
+        btnSalvarToken.addEventListener('click', () => {
+            const novoToken = tokenInput.value.trim();
+            if (novoToken && novoToken.startsWith("hf_")) {
+                localStorage.setItem('saturnix_api_key', novoToken);
+                tokenSalvo = novoToken;
+                alert("Chave salva com sucesso no seu celular!");
+                boasVindasMsg.innerText = "Saturnix pronto e conectado com sua chave local! Como posso ajudar você?";
+            } else {
+                alert("Por favor, cole uma chave válida que comece com hf_");
+            }
+        });
 
-        async function chamarHuggingFace(mensagens) {
+        async function chamarHuggingFace(textoUsuario) {
+            if (!tokenSalvo) {
+                return "Por favor, cole sua chave ativa hf_ no topo da página e clique em Salvar.";
+            }
+
             try {
                 const response = await fetch(MODEL_URL, {
                     method: "POST",
                     headers: {
-                        "Authorization": `Bearer ${HUGGING_FACE_API_KEY}`,
+                        "Authorization": `Bearer ${tokenSalvo}`,
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        inputs: mensagens[mensagens.length - 1].content,
+                        inputs: textoUsuario,
                         parameters: { max_new_tokens: 150, return_full_text: false }
                     })
                 });
@@ -333,7 +280,7 @@
                 const data = await response.json();
                 
                 if (data && data.error && data.error.includes("loading")) {
-                    return "Estou acordando meus motores nos servidores. Mande a mensagem novamente em 5 segundos!";
+                    return "O modelo está iniciando nos servidores. Tente enviar novamente em instantes!";
                 }
 
                 if (data && data[0] && data[0].generated_text) {
@@ -341,9 +288,10 @@
                 } else if (data.generated_text) {
                     return data.generated_text.trim();
                 }
-                return "Conectado, mas o processador não gerou texto.";
+                
+                return "A IA não retornou texto. Verifique se seu token do Hugging Face está ativo e correto.";
             } catch (erro) {
-                return "Erro ao processar nos servidores da IA.";
+                return "Erro ao conectar com a API. Verifique a validade do seu token.";
             }
         }
 
@@ -359,16 +307,13 @@
             userInput.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            historicoChat.push({ role: 'user', content: texto });
-            salvarHistorico();
-
             const msgCarregando = document.createElement('div');
             msgCarregando.className = 'message saturnix-message';
-            msgCarregando.innerText = "Saturnix está pensando...";
+            msgCarregando.innerText = "Pensando...";
             chatMessages.appendChild(msgCarregando);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            const respostaIA = await chamarHuggingFace(historicoChat);
+            const respostaIA = await chamarHuggingFace(texto);
 
             chatMessages.removeChild(msgCarregando);
 
@@ -378,19 +323,12 @@
             chatMessages.appendChild(msgSaturnix);
             
             chatMessages.scrollTop = chatMessages.scrollHeight;
-
-            historicoChat.push({ role: 'assistant', content: respostaIA });
-            salvarHistorico();
         }
 
         btnEnviar.addEventListener('click', enviarMensagem);
         userInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                enviarMensagem();
-            }
+            if (e.key === 'Enter') enviarMensagem();
         });
-
-        atualizarHistoricoVisual();
     </script>
 </body>
 </html>
