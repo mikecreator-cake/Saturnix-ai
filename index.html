@@ -2,10 +2,9 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Saturnix AI</title>
     <style>
-        /* --- ESTILIZAÇÃO GERAL (CSS) --- */
         * {
             margin: 0;
             padding: 0;
@@ -18,245 +17,233 @@
             background-color: #0b0b0e;
             color: #e2e2e6;
             height: 100vh;
+            height: -webkit-fill-available;
             overflow: hidden;
         }
 
-        /* --- BARRA LATERAL --- */
+        /* Menu Lateral */
         .sidebar {
-            width: 280px;
+            width: 260px;
             background-color: #121217;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            border-right: 1px solid #22222c;
-            padding: 15px;
+            border-right: 1px solid #1f1f29;
+            z-index: 10;
         }
 
-        /* LOGO: ESPIRAL COM ESTRELA */
         .logo-container {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
-        .logo-espiral {
-            position: relative;
-            width: 40px;
-            height: 40px;
-            border: 3px solid transparent;
-            border-top-color: #8a2be2;
-            border-right-color: #4b0082;
-            border-bottom-color: #00ffff;
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #00ffcc, #7928ca);
             border-radius: 50%;
-            animation: girar 4s linear infinite;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .logo-espiral::before {
-            content: '';
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            border: 3px solid transparent;
-            border-left-color: #9400d3;
-            border-bottom-color: #00ffff;
-            border-radius: 50%;
-        }
-
-        .estrela-centro {
-            position: absolute;
-            width: 0;
-            height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-bottom: 10px solid #ffffff;
-            transform: rotate(35deg);
-        }
-        .estrela-centro::before {
-            content: '';
-            position: absolute;
-            top: 3px;
-            left: -6px;
-            width: 0;
-            height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-bottom: 10px solid #ffffff;
-            transform: rotate(-35deg);
-        }
-        .estrela-centro::after {
-            content: '';
-            position: absolute;
-            top: 3px;
-            left: -6px;
-            width: 0;
-            height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-bottom: 10px solid #ffffff;
-            transform: rotate(-70deg);
-        }
-
-        @keyframes girar {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .logo-texto {
-            font-size: 20px;
             font-weight: bold;
-            background: linear-gradient(45deg, #00ffff, #8a2be2);
+            color: #fff;
+        }
+
+        .brand-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #00ffcc, #a855f7);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
         }
 
-        /* SELEÇÃO DE PERSONALIDADE */
-        .config-section {
-            margin-bottom: 20px;
-        }
-
-        .config-section label {
-            font-size: 11px;
+        .section-title {
+            font-size: 0.75rem;
             text-transform: uppercase;
-            color: #787882;
-            display: block;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            color: #6b7280;
+            margin-bottom: 10px;
+            font-weight: 600;
         }
 
-        .select-personalidade {
+        select {
             width: 100%;
             padding: 10px;
             background-color: #1c1c24;
             border: 1px solid #2d2d3d;
-            border-radius: 6px;
-            color: #fff;
+            border-radius: 8px;
+            color: #e2e2e6;
             outline: none;
             cursor: pointer;
+            margin-bottom: 25px;
         }
 
-        /* HISTÓRICO DE MEMÓRIA */
-        .historico-titulo {
-            font-size: 12px;
-            color: #787882;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-
-        .lista-conversas {
+        .history-container {
             flex: 1;
             overflow-y: auto;
         }
 
-        .item-conversa {
+        .history-item {
             padding: 10px;
-            background-color: #16161f;
             border-radius: 6px;
             margin-bottom: 8px;
-            font-size: 13px;
             cursor: pointer;
+            font-size: 0.9rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            border: 1px solid transparent;
-            transition: all 0.2s;
+            background-color: transparent;
+            transition: background 0.2s;
         }
 
-        .item-conversa:hover {
-            border-color: #8a2be2;
+        .history-item:hover {
             background-color: #1c1c24;
         }
 
-        /* --- ÁREA PRINCIPAL DO CHAT --- */
-        .chat-container {
+        /* Área do Chat Principal */
+        .chat-area {
             flex: 1;
             display: flex;
             flex-direction: column;
+            height: 100%;
+            position: relative;
             background-color: #0b0b0e;
         }
 
         .chat-messages {
             flex: 1;
-            padding: 20px;
             overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 100px; /* Espaço para a barra de input fixa */
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
 
-        .mensagem {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-size: 15px;
+        /* Balões de Mensagem */
+        .message {
+            max-width: 85%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 0.95rem;
             line-height: 1.5;
-            word-wrap: break-word;
-            white-space: pre-wrap;
+            animation: fadeIn 0.3s ease;
         }
 
-        .mensagem.usuario {
-            background-color: #311b92;
+        .user-message {
+            background-color: #2563eb;
             color: #ffffff;
             align-self: flex-end;
             border-bottom-right-radius: 2px;
         }
 
-        .mensagem.saturnix {
+        .saturnix-message {
             background-color: #1c1c24;
             color: #e2e2e6;
             align-self: flex-start;
             border-bottom-left-radius: 2px;
-            border-left: 3px solid #00ffff;
+            border-left: 3px solid #00ffcc;
         }
 
-        /* BARRA DE ENTRADA DE TEXTO */
-        .chat-input-area {
+        .system-message {
+            background-color: #271c3a;
+            color: #d8b4fe;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+            border-left: 3px solid #a855f7;
+        }
+
+        /* Barra de Input Fixa ao Fundo */
+        .input-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
             padding: 20px;
-            background-color: #0b0b0e;
+            background: linear-gradient(to top, #0b0b0e 70%, transparent);
             display: flex;
             gap: 10px;
+            align-items: center;
         }
 
-        .input-box {
+        .input-wrapper {
             flex: 1;
-            padding: 14px;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 20px;
             background-color: #121217;
-            border: 1px solid #22222c;
-            border-radius: 8px;
-            color: #ffffff;
-            font-size: 15px;
+            border: 1px solid #2d2d3d;
+            border-radius: 24px;
+            color: #e2e2e6;
+            font-size: 0.95rem;
             outline: none;
+            transition: border-color 0.2s;
         }
 
-        .input-box:focus {
-            border-color: #00ffff;
+        input:focus {
+            border-color: #00ffcc;
         }
 
-        .btn-enviar {
-            padding: 0 24px;
-            background: linear-gradient(45deg, #8a2be2, #00ffff);
+        button {
+            background: linear-gradient(135deg, #00ffcc, #2563eb);
             border: none;
-            border-radius: 8px;
-            color: #000;
-            font-weight: bold;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: transform 0.2s;
+            flex-shrink: 0;
         }
 
-        .btn-enviar:hover {
-            opacity: 0.9;
+        button:active {
+            transform: scale(0.95);
         }
 
-        /* Responsividade para telas menores (Celulares) */
-        @media (max-width: 600px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #22222c; padding: 12px; }
-            .logo-container { margin-bottom: 10px; }
-            .lista-conversas, .historico-titulo { display: none; }
-            .chat-input-area { padding: 12px; }
+        /* Responsividade para Telemóveis */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 12px 15px;
+                border-right: none;
+                border-bottom: 1px solid #1f1f29;
+            }
+            .logo-container {
+                margin-bottom: 10px;
+            }
+            .section-title, .history-container {
+                display: none; /* Esconde histórico antigo no topo para poupar espaço */
+            }
+            select {
+                margin-bottom: 0;
+            }
+            .chat-messages {
+                padding: 15px;
+                padding-bottom: 90px;
+            }
+            .input-container {
+                padding: 10px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -264,154 +251,150 @@
 
     <div class="sidebar">
         <div class="logo-container">
-            <div class="logo-espiral">
-                <div class="estrela-centro"></div>
+            <div class="logo-icon">S</div>
+            <div class="brand-name">SATURNIX</div>
+        </div>
+        
+        <div class="section-title">Personalidade da IA</div>
+        <select id="selectPersonalidade">
+            <option value="padrao">Padrão (Equilibrado)</option>
+            <option value="tech">Especialista Tech</option>
+            <option value="dev">Modo Programador</option>
+        </select>
+
+        <div class="section-title">Histórico Local</div>
+        <div class="history-container" id="historicoVisual">
             </div>
-            <span class="logo-texto">SATURNIX</span>
-        </div>
-
-        <div class="config-section">
-            <label for="personalidade">Personalidade da IA</label>
-            <select id="personalidade" class="select-personalidade">
-                <option value="padrao">Padrão (Equilibrado)</option>
-                <option value="zueiro">Zueiro / Irônico</option>
-                <option value="dev">Mestre Dev (Programação)</option>
-                <option value="serio">Sério / Científico</option>
-            </select>
-        </div>
-
-        <div class="historico-titulo">Memória Local (Prompts)</div>
-        <div class="lista-conversas" id="historicoLista"></div>
     </div>
 
-    <div class="chat-container">
+    <div class="chat-area">
         <div class="chat-messages" id="chatMessages">
-            <div class="mensagem saturnix">Olá! Eu sou o Saturnix. Conexão estabelecida com a rede pública. Como posso ajudar você hoje?</div>
+            <div class="message system-message">
+                Olá! Eu sou o Saturnix. Conexão estabelecida com a rede pública. Como posso ajudar você hoje?
+            </div>
         </div>
 
-        <div class="chat-input-area">
-            <input type="text" id="userInput" class="input-box" placeholder="Escreva para o Saturnix..." autocomplete="off">
-            <button id="btnEnviar" class="btn-enviar">Enviar</button>
+        <div class="input-container">
+            <div class="input-wrapper">
+                <input type="text" id="userInput" placeholder="Envie uma mensagem para o Saturnix..." autocomplete="off">
+            </div>
+            <button id="btnEnviar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
         </div>
     </div>
 
     <script>
+        const HUGGING_FACE_API_KEY = "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"; 
+        const MODEL_URL = "https://api-inference.huggingface.co/models/Core42/jais-13b-chat";
+
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
         const btnEnviar = document.getElementById('btnEnviar');
-        const personalitiesSelect = document.getElementById('personalidade');
-        const historicoLista = document.getElementById('historicoLista');
+        const selectPersonalidade = document.getElementById('selectPersonalidade');
+        const historicoVisual = document.getElementById('historicoVisual');
 
-        // Recuperar dados guardados no navegador do celular (Memória Local)
-        let memoriaConversas = JSON.parse(localStorage.getItem('saturnix_memoria')) || [];
+        // Carrega o histórico salvo no LocalStorage
+        let historicoChat = JSON.parse(localStorage.getItem('saturnix_history')) || [];
 
-        function atualizarHistoricoVisual() {
-            historicoLista.innerHTML = '';
-            memoriaConversas.slice().reverse().forEach((conversa) => {
-                const item = document.createElement('div');
-                item.className = 'item-conversa';
-                item.innerText = conversa.texto;
-                historicoLista.appendChild(item);
-            });
-        }
-
-        function salvarNaMemoria(textoUsuario) {
-            memoriaConversas.push({ texto: textoUsuario });
-            localStorage.setItem('saturnix_memoria', JSON.stringify(memoriaConversas));
+        function salvarHistorico() {
+            localStorage.setItem('saturnix_history', JSON.stringify(historicoChat));
             atualizarHistoricoVisual();
         }
 
-        // CONEXÃO COM A RE DE INFERÊNCIA PÚBLICA DO HUGGING FACE
-        async function chamarSaturnixAPI(entradaUsuario, personality) {
-            const URL = "https://api-inference.huggingface.co/models/MistralAI/Mistral-7B-Instruct-v0.2";
-            
-            // Definição do contexto comportamental básico
-            let contexto = "Seu nome é Saturnix. Você é um assistente virtual inteligente e prestativo focado em criação de conteúdo livre.";
-            
-            if (personality === "zueiro") {
-                contexto += " Responda de forma irônica, leve, humorada e descontraída, utilizando gírias comuns da internet.";
-            } else if (personality === "dev") {
-                contexto += " Você atua como um engenheiro de software experiente. Ofereça respostas focadas em códigos estruturados, limpos e de fácil entendimento.";
-            } else if (personality === "serio") {
-                contexto += " Adote uma abordagem inteiramente formal, analítica, precisa e técnica.";
-            }
+        function atualizarHistoricoVisual() {
+            historicoVisual.innerHTML = '';
+            historicoChat.slice().reverse().forEach((msg, index) => {
+                if(msg.role === 'user') {
+                    const item = document.createElement('div');
+                    item.className = 'history-item';
+                    item.innerText = msg.content;
+                    historicoVisual.appendChild(item);
+                }
+            });
+        }
 
-            // Formatação do prompt necessária para modelos Instruct interpretarem contexto
-            const promptCompleto = `<s>[INST] ${contexto}\nUsuário: ${entradaUsuario} [/INST]`;
-
+        async function chamarHuggingFace(mensagens) {
             try {
-                const respostaServidor = await fetch(URL, {
+                const response = await fetch(MODEL_URL, {
                     method: "POST",
-                    headers: { 
+                    headers: {
+                        "Authorization": `Bearer ${HUGGING_FACE_API_KEY}`,
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ inputs: promptCompleto })
+                    body: JSON.stringify({
+                        inputs: mensagens[mensagens.length - 1].content,
+                        parameters: { max_new_tokens: 250, return_full_text: false }
+                    })
                 });
 
-                const dados = await respostaServidor.json();
-                
-                // Processamento do retorno textual da API do Hugging Face
-                if (dados && dados[0] && dados[0].generated_text) {
-                    let textoPuro = dados[0].generated_text.replace(promptCompleto, "").trim();
-                    return textoPuro || "Processamento concluído, porém sem conteúdo de retorno.";
-                } else {
-                    return "O servidor público está ativando o modelo de linguagem neste instante. Aguarde alguns segundos e repita o envio.";
+                const data = await response.json();
+                if (data && data[0] && data[0].generated_text) {
+                    return data[0].generated_text.trim();
+                } else if (data.generated_text) {
+                    return data.generated_text.trim();
                 }
+                return "Recebi uma resposta vazia da inteligência artificial.";
             } catch (erro) {
-                console.error("Erro na comunicação:", erro);
-                return "Falha na conexão de rede com a central pública do Saturnix. Verifique seu sinal de internet.";
+                console.error("Erro na API:", erro);
+                return "Desculpe, ocorreu um erro ao conectar ao meu cérebro processador.";
             }
         }
 
-        // GERENCIADOR DE ENVIO DE MENSAGEM DO CHAT
         async function enviarMensagem() {
             const texto = userInput.value.trim();
-            if (texto === '') return;
+            if (!texto) return;
 
-            // Insere balão de mensagem do usuário
-            const msgUsuario = document.createElement('div');
-            msgUsuario.className = 'mensagem usuario';
-            msgUsuario.innerText = texto;
-            chatMessages.appendChild(msgUsuario);
+            // Adiciona mensagem do utilizador ao ecrã
+            const msgUser = document.createElement('div');
+            msgUser.className = 'message user-message';
+            msgUser.innerText = texto;
+            chatMessages.appendChild(msgUser);
 
             userInput.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            salvarNaMemoria(texto);
+            // Guarda no histórico
+            historicoChat.push({ role: 'user', content: texto });
+            salvarHistorico();
 
-            // Cria indicador visual de processamento
+            // Balão de carregamento
             const msgCarregando = document.createElement('div');
-            msgCarregando.className = 'mensagem saturnix';
-            msgCarregando.innerText = "Saturnix está computando a resposta...";
+            msgCarregando.className = 'message saturnix-message';
+            msgCarregando.innerText = "Saturnix está a pensar...";
             chatMessages.appendChild(msgCarregando);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Dispara a requisição para a API
-            const personalidadeAtiva = personalitiesSelect.value;
-            const respostaIA = await chamarSaturnixAPI(texto, personalidadeAtiva);
+            // Faz a chamada à API
+            const respostaIA = await chamarHuggingFace(historicoChat);
 
-            // Remove o balão temporário e insere a resposta gerada
+            // Remove o balão de carregamento e mete a resposta real
             chatMessages.removeChild(msgCarregando);
 
             const msgSaturnix = document.createElement('div');
-            msgSaturnix.className = 'mensagem saturnix';
+            msgSaturnix.className = 'message saturnix-message';
             msgSaturnix.innerText = respostaIA;
             chatMessages.appendChild(msgSaturnix);
             
             chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Guarda resposta no histórico
+            historicoChat.push({ role: 'assistant', content: respostaIA });
+            salvarHistorico();
         }
 
-        // Listeners para os gatilhos de envio
+        // Triggers de envio
         btnEnviar.addEventListener('click', enviarMensagem);
-        userInput.addEventListener('keypress', function(e) {
+        userInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 enviarMensagem();
             }
         });
 
-        // Carrega o histórico salvo ao iniciar o app
+        // Inicializa o histórico visual
         atualizarHistoricoVisual();
     </script>
-</body
-  </html>
+</body>
+</html>
+
   
