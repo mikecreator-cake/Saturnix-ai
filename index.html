@@ -175,7 +175,7 @@
     <div class="chat-area">
         <div class="chat-messages" id="chatMessages">
             <div class="message system-message" id="boasVindasMsg">
-                Saturnix Core v2.0 Online! Sistema local ativado com sucesso para respostas instantâneas. Como posso ajudar?
+                Saturnix Core v2.1 Online! Sistema local ativado com sucesso para respostas instantâneas. Como posso ajudar?
             </div>
         </div>
 
@@ -194,7 +194,6 @@
         const userInput = document.getElementById('userInput');
         const btnEnviar = document.getElementById('btnEnviar');
 
-        // Respostas locais inteligentes baseadas em palavras-chave para o site funcionar 100% livre
         function gerarRespostaLocal(texto) {
             const t = texto.toLowerCase();
             
@@ -214,7 +213,6 @@
                 return "Fui desenvolvido e customizado pelo MikeCreator! O site está ficando insano.";
             }
             
-            // Respostas padrão aleatórias caso não encontre palavra-chave
             const respostasPadrao = [
                 "Entendido! Meu sistema local processou sua mensagem com sucesso. O que quer fazer a seguir no projeto?",
                 "Interessante! Agora que o chat não depende de tokens externos, posso responder instantaneamente qualquer comando.",
@@ -223,7 +221,7 @@
             ];
             
             const index = Math.floor(Math.random() * respostasPadrao.length);
-            return respuestasPadrao[index];
+            return respostasPadrao[index];
         }
 
         async function enviarMensagem() {
@@ -239,21 +237,23 @@
             userInput.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Efeito de Carregamento Rápido
+            // Criar balão de Carregamento
             const msgCarregando = document.createElement('div');
             msgCarregando.className = 'message saturnix-message';
             msgCarregando.innerText = "Pensando...";
             chatMessages.appendChild(msgCarregando);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Simular um atraso de resposta humano (500ms)
-            await new Promise(resolve => setTimeout(resolve, 500));
+            // Pequena pausa para parecer uma IA real pensando
+            await new Promise(resolve => setTimeout(resolve, 600));
 
+            // REMOVE o balão de carregamento de forma correta antes de exibir a resposta
+            if (msgCarregando && msgCarregando.parentNode) {
+                msgCarregando.parentNode.removeChild(msgCarregando);
+            }
+
+            // Mensagem de resposta real do Saturnix
             const respostaIA = gerarRespostaLocal(texto);
-
-            chatMessages.removeChild(msgCarregando);
-
-            // Mensagem do Saturnix
             const msgSaturnix = document.createElement('div');
             msgSaturnix.className = 'message saturnix-message';
             msgSaturnix.innerText = respostaIA;
