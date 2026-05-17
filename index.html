@@ -22,7 +22,6 @@
             flex-direction: column;
         }
 
-        /* Topo de Configuração no Celular */
         .top-bar {
             background-color: #121217;
             padding: 15px;
@@ -92,7 +91,6 @@
             white-space: nowrap;
         }
 
-        /* Área do Chat Principal */
         .chat-area {
             flex: 1;
             display: flex;
@@ -112,7 +110,6 @@
             gap: 20px;
         }
 
-        /* Balões de Mensagem */
         .message {
             max-width: 85%;
             padding: 14px 18px;
@@ -145,7 +142,6 @@
             border-left: 3px solid #a855f7;
         }
 
-        /* Barra de Input Fixa ao Fundo */
         .input-container {
             position: absolute;
             bottom: 0;
@@ -231,7 +227,7 @@
     </div>
 
     <script>
-        const MODEL_URL = "https://api-inference.huggingface.co/models/Core42/jais-13b-chat";
+        const MODEL_URL = "https://api-inference.huggingface.co/models/meta-llama/Meta-Llama-3-8B-Instruct";
 
         const chatMessages = document.getElementById('chatMessages');
         const userInput = document.getElementById('userInput');
@@ -244,7 +240,7 @@
 
         if (tokenSalvo) {
             tokenInput.value = tokenSalvo;
-            boasVindasMsg.innerText = "Saturnix pronto e conectado com sua chave local! Como posso ajudar você?";
+            boasVindasMsg.innerText = "Saturnix pronto e conectado! Como posso ajudar você?";
         }
 
         btnSalvarToken.addEventListener('click', () => {
@@ -252,8 +248,8 @@
             if (novoToken && novoToken.startsWith("hf_")) {
                 localStorage.setItem('saturnix_api_key', novoToken);
                 tokenSalvo = novoToken;
-                alert("Chave salva com sucesso no seu celular!");
-                boasVindasMsg.innerText = "Saturnix pronto e conectado com sua chave local! Como posso ajudar você?";
+                alert("Chave salva com sucesso!");
+                boasVindasMsg.innerText = "Saturnix pronto e conectado! Como posso ajudar você?";
             } else {
                 alert("Por favor, cole uma chave válida que comece com hf_");
             }
@@ -289,9 +285,9 @@
                     return data.generated_text.trim();
                 }
                 
-                return "A IA não retornou texto. Verifique se seu token do Hugging Face está ativo e correto.";
+                return "A IA não retornou texto. Verifique se seu token está ativo.";
             } catch (erro) {
-                return "Erro ao conectar com a API. Verifique a validade do seu token.";
+                return "Erro ao conectar com a API. Verifique seu token.";
             }
         }
 
